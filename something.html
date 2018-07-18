@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <link type="text/css" rel="stylesheet" href="dist/handsontable.full.css">
+</head>
+
+<body>
+    <div>
+        <div id="example1" class="hot handsontable htRowHeaders htColumnHeaders"></div>
+    </div>
+   
+    <input type="file" id="csv-file" name="files" accept=".csv">
+
+    <script src="dist/handsontable.full.js"></script>
+    <script src="PapaParse/papaparse.js"></script>
+    <script src="jquery.js"></script>
+    <script>
+        var data;
+
+        function handleFileSelect(evt) {
+            var file = evt.target.files[0];
+
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                complete: function (results) {
+
+                    var headers = (Object.keys(results.data[0]));
+                    console.log(headers);
+                    var rows = results.data.length;
+                    var columns = Object.keys(results.data[0]).length;
+                    console.log(rows + 1);
+                    console.log(columns);
+                    var content;
+                    // for (j = 0; j < results.data.length; j++) {
+                    //         content1 = (Object.values(results.data[j]));
+                    //          console.log(content1)
+                    // }
+                        // content2 = (Object.values(results.data[1]));
+                        for (i = 0; i < rows; i++) {
+                            var j = 0;
+                                for (var key in results.data[i]) {
+                                    if (results.data[i].hasOwnProperty(key)) {
+                                        var element = results.data[i][key];
+                                        hot.setDataAtCell(i+1, j, element);
+                                        hot.setDataAtCell(0, j, headers[j]);
+                                        
+                                    }
+                                    j++;
+                                }
+                            // for (m = 0; m < columns; m++) {
+                                
+                            // }
+                        }
+                    
+
+
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $("#csv-file").change(handleFileSelect);
+        });
+        var example1 = document.getElementById('example1');
+
+        var hot = new Handsontable(example1, {
+            data: data,
+            minSpareRows: 3,
+            minSpareCols: 7,
+            colHeaders: true,
+            rowHeaders: true,
+
+        });
+
+    </script>
+
+    </script>
+</body>
+
+</html>
